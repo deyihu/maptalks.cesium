@@ -1,7 +1,9 @@
-import * as maptalks from 'maptalks';
-import * as Cesium from 'Cesium';
+import * as YY from 'yymap';
+import * as Cesium from 'cesium';
 export { default as Primitive } from './src/Primitive';
 export { default as Cesium3DTileset } from './src/Cesium3DTileset';
+
+const maptalks = YY.getNamespace().maptalks;
 
 const EVENTS = [
     'mousemove',

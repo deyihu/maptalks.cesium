@@ -5,7 +5,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>maptalks + cesium</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maptalks/dist/maptalks.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yymap/dist/yy/yy.min.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/yymap/dist/yy/yy.min.js"></script>
     <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/cesium@1.70.0/Build/Cesium/Cesium.js'></script>
     <script type="text/javascript"
         src="https://cdn.jsdelivr.net/npm/three@0.97.0/examples/js/libs/stats.min.js"></script>
@@ -28,24 +29,22 @@
 <body>
     <div id="map"></div>
 </body>
-<script type='text/javascript' src='https://cdn.jsdelivr.net/npm/maptalks/dist/maptalks.min.js'></script>
-<script type='text/javascript' src='../dist/maptalks.cesium.js'> </script>
+<script type='text/javascript' src='../dist/yymap-cesium.js'> </script>
 <script type="text/javascript">
 
 
     Cesium.BingMapsApi.defaultKey = 'ApD3P1iMWEcs7okcQD2-idlF4bgGLMqF_p6ZKYovVeX80cmjpWzR5EZs9E_I2tXn';
 
-    var map = new maptalks.Map("map", {
+
+
+    const map = new YY.Map('map', {
         "center": [108.95677034431264, 34.21917804542275], "zoom": 18, "pitch": 35.60000000000004, "bearing": -1.8000000000000682,
-        centerCross: true,
-        baseLayer: new maptalks.TileLayer('base', {
-            urlTemplate: 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-            subdomains: ['a', 'b', 'c', 'd'],
-            attribution: '&copy; <a href="http://osm.org">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/">CARTO</a>'
-        })
     });
 
-    var cesiumLayer = new maptalks.CesiumLayer('cesium', { gray: false, geometryEvents: true }).addTo(map);
+    const googleTileLayer = YY.LayerLookup.lookup('tdt', { style: 'image' });
+    map.addBaseLayer(googleTileLayer);
+
+    var cesiumLayer = new YY.CesiumLayer('cesium', { gray: false, geometryEvents: true }).addTo(map);
 
     cesiumLayer.onSelect = function (e) {
         console.log(e);
@@ -67,7 +66,7 @@
     // });
 
 
-    var tileset = new maptalks.Cesium3DTileset({
+    var tileset = new YY.Cesium3DTileset({
         url: 'http://earthsdk.com/v/last/Apps/assets/dayanta/tileset.json'
     });
     // scene.primitives.add(tileset);
@@ -114,9 +113,9 @@
             rotation: Cesium.Math.PI_OVER_FOUR,
             vertexFormat: Cesium.VertexFormat.POSITION_AND_ST
         }),
-        id: maptalks.Util.GUID()
+        id: YY.Util.GUID()
     });
-    const ellipse = new maptalks.Primitive({
+    const ellipse = new YY.Primitive({
         geometryInstances: instance,
         appearance: new Cesium.EllipsoidSurfaceAppearance({
             material: Cesium.Material.fromType('Checkerboard')
@@ -151,10 +150,10 @@
             radius: 10,
             vertexFormat: Cesium.VertexFormat.POSITION_AND_ST
         }),
-        id: maptalks.Util.GUID()
+        id: YY.Util.GUID()
     });
 
-    const circle = new maptalks.Primitive({
+    const circle = new YY.Primitive({
         geometryInstances: instance,
         appearance: new Cesium.EllipsoidSurfaceAppearance({
             material: Cesium.Material.fromType('Checkerboard')
@@ -178,8 +177,8 @@
     });
     cesiumLayer.addPrimitive(circle);
 
-    var layer = new maptalks.VectorLayer('v');
-    layer.addGeometry(new maptalks.Marker(map.getCenter())).addTo(map);
+    var layer = new YY.VectorLayer('v');
+    layer.addOverlay(new YY.Point(map.getCenter())).addTo(map);
 
     var stats = new Stats();
     map.getContainer().appendChild(stats.dom);

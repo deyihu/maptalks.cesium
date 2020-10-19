@@ -1,7 +1,8 @@
 
-import * as maptalks from 'maptalks';
-import * as Cesium from 'Cesium';
+import * as YY from 'yymap';
+import * as Cesium from 'cesium';
 import Mixins from './mixins';
+const maptalks = YY.getNamespace().maptalks;
 
 class Primitive extends maptalks.Eventable(Cesium.Primitive) {
 
